@@ -85,7 +85,7 @@
         </div>
 
 
-        <section class="menus">
+        <section class="menus my-5">
             <div class="container">
                 {{-- <div class="row">
                     <div class="col-12 mb-3" data-aos="fade-up" >
@@ -125,7 +125,8 @@
                                             Buy Now
                                         </button>
                                     </form>
-                                    <form class="addtocard">
+                                    <form action="{{route('detail-add',$item->id)}}" method="post">
+                                        @csrf
                                         <input type="hidden" name="addtocard" class="addtocard" value="true">
                                         <input type="hidden" name="id" value="{{ $item->id }}" class="product-id">
                                         <button type="submit" class="btn add-to-card px-4 btn-block mb-3">
@@ -148,9 +149,8 @@
                 </div>
             </div>
         </section>
-        <section>
-
-            <div class="people text-center" data-aos="zoom-out">
+        <section class="my-2">
+            <div class=" text-center" data-aos="zoom-out" style="">
                 <h1 style="color: #fc9e56">
                     WHAT PEOPLE SAYS ABOUT US
                     <img src="frontend/images/ic_testi.png" alt="" />
@@ -376,12 +376,10 @@
             }
         })
 
-
-        $(".addtocard").submit(function(event) {
-            event.preventDefault();
+        function addtocard(id){
             var idproduct = $('.product-id').val();
             var addtocard = $('.addtocard').val();
-
+            console.log(id)
             var Data = {
                 id: idproduct,
                 addtocard: "true",
@@ -398,14 +396,14 @@
                         title: 'Berhasil Memasukan ke keranjang'
                     })
                     var carts = parseInt({{ $carts }})
-                    console.log(carts);
                     $(".cart-badge").html(carts + 1)
                 }
             })
             addtocard.error(function(e) {
                 alert('salah')
             })
-        })
+        }
+
     </script>
 @endpush
 

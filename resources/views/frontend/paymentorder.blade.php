@@ -5,8 +5,6 @@
 @endsection
 
 @section('content')
-    <!-- Page Content -->
-    <!-- Page Content -->
     <div class="page-content page-cart">
         <section class="store-breadcrumbs" data-aos="fade-down" data-aos-delay="100">
             <div class="container">
@@ -75,7 +73,7 @@
                         <hr />
                     </div>
                     <div class="col-12">
-                        <h2 class="mb-4">Shipping Details</h2>
+                        <h3 class="mb-4">Shipping Details</h3>
                     </div>
                 </div>
                 <form action="{{ route('checkout') }}" method="POST" enctype="multipart/form-data">
@@ -151,12 +149,12 @@
                     <div class="row" data-aos="fade-up" data-aos-delay="150">
                         <div class="col-12">
                             <hr />
-                            <h2> Notes </h2>
+                            <h3> Notes </h3>
                             <h5> {{ $noteaddress }}</h5>
                         </div>
                         <div class="col-12">
                             <hr>
-                            <h2 class="mb-1">Payment Informations</h2>
+                            <h3 class="">Payment Informations</h3>
                         </div>
                     </div>
                     <div class="row" data-aos="fade-up" data-aos-delay="200">
@@ -219,11 +217,11 @@
                                                     <p> {{ number_format($allprice) }}</p>
                                                 </div>
                                                 <hr>
-                                                <h2> Transfer pembayaran </h2>
+                                                <h3> Transfer pembayaran </h3>
                                                 <img src="{{ asset('frontend/images/ic-bca.png') }}" width="100px"
                                                     height="75px" style="objec-fit:cover" alt="">
-                                                <h2> 776261232 </h2>
-                                                <p style="color: #979797"> A/N Ageng Hermawan </p>
+                                                <h3> 776261232 </h3>
+                                                <p style="color: #979797"> A/N  Vinnotinto Rizky Anugrah S  </p>
                                                 <p class="alert text-danger"> Tambahkan Bukti
                                                     Pembayaran dibawah sini </p>
                                                 <div class="upload mt-4 text-center">

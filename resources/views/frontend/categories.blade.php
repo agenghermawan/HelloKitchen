@@ -48,35 +48,35 @@
                 <hr>
                 <div class="row mt-4">
                     <div class="col-md-4 col-12">
-                        <div class="card mb-2">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <p style="font-weight: 700"> Semua Product </p>
-                                    </div>
-                                    <div>
-                                        {{-- <img src="{{ Storage::url($dt->image) }}" width="40px" height="40px" alt=""
-                                            style="border-radius: 100%"> --}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @foreach ($category as $dt)
+                        <form action="{{route('categories')}}" method="GET">
+                            <input type="hidden" value="all" name="searchCategory">
                             <div class="card mb-2">
-                                <div class="card-body">
-                                    <a href="">
-                                        <div class="d-flex justify-content-between">
-                                            <div>
-                                                <p style="font-weight: 700"> {{ $dt->name }} </p>
-                                            </div>
-                                            <div>
-                                                <img src="{{ Storage::url($dt->image) }}" width="40px" height="40px"
-                                                    alt="" style="border-radius: 100%">
-                                            </div>
+                                    <button type="submit" class="d-flex justify-content-between shadow p-3 bg-light" style="border: none" >
+                                        <div>
+                                            <p style="font-weight: 700"> Semua Product </p>
                                         </div>
-                                    </a>
-                                </div>
+                                        <div>
+                                            {{-- <img src="{{ Storage::url($dt->image) }}" width="40px" height="40px"
+                                                alt="" style="border-radius: 100%"> --}}
+                                        </div>
+                                     </button>
                             </div>
+                        </form>
+                        @foreach ($category as $dt)
+                        <form action="{{route('categories')}}" method="GET">
+                            <input type="hidden" value="{{$dt->name}}" name="searchCategory">
+                            <div class="card mb-2">
+                                    <button type="submit" class="d-flex justify-content-between shadow p-3 bg-light" style="border: none" >
+                                        <div class="d-flex align-content-center">
+                                            <p style="font-weight: 700"> {{ $dt->name }} </p>
+                                        </div>
+                                        <div>
+                                            <img src="{{ Storage::url($dt->image) }}" width="40px" height="40px"
+                                                alt="" style="border-radius: 100%">
+                                        </div>
+                                     </button>
+                            </div>
+                        </form>
                         @endforeach
 
                     </div>
@@ -89,14 +89,14 @@
                                             <img src="{{ Storage::url($item->ThumbnailPhoto) }}" class=""
                                                 width="100%" height="250px" style="border-radius: 15px" shadow" alt="">
                                             @auth
-                                                <form class="addtocard">
-                                                    <input type="hidden" name="addtocard" id="addtocard" value="true">
-                                                    <input type="hidden" name="id" value="{{ $item->id }}" id="product-id">
-                                                    <button type="submit" class="btn add-to-card btn-info"
-                                                        style="position: absolute;bottom:0%;right:0%">
-                                                        Add to cart {{ $item->id }}
-                                                    </button>
-                                                </form>
+                                            <form action="{{route('detail-add',$item->id)}}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="addtocard" class="addtocard" value="true">
+                                                <input type="hidden" name="id" value="{{ $item->id }}" class="product-id">
+                                                <button type="submit" style="position: absolute;bottom:0%;right:0%" class="btn btn-login">
+                                                    Add to cart
+                                                </button>
+                                            </form>
                                             @endauth
                                         </div>
                                         <div class="product-title d-flex justify-content-between">
@@ -112,19 +112,6 @@
                             @endforeach
                         </div>
                     </div>
-                    {{-- @foreach ($category as $item)
-                        <div class="col-6 col-md-3 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                        <a class="component-categories d-block" href="">
-                            <div class="categories-image">
-                                <img src="{{ Storage::url($item->image) }}" style="border-radius: 0 20px" alt="Gadgets Categories"
-                                    class="w-100" height="217px" />
-                            </div>
-                            <p class="categories-text">
-                                {{$item->name}}
-                            </p>
-                        </a>
-                    </div>
-                    @endforeach --}}
                 </div>
             </div>
         </section>

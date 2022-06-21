@@ -35,7 +35,8 @@ Route::get('/categories-ayam', [App\Http\Controllers\CategoriesController::class
 
 Route::post('/addreview/{id}',[App\Http\Controllers\LandingPageController::class, 'addreview'])->name('addreview');
 Route::get('/order-history',[App\Http\Controllers\LandingPageController::class, 'orderhistory'])->name('orderhistory');
-Route::post('/show-order/{id}',[App\Http\Controllers\LandingPageController::class, 'ordershow'])->name('ordershow');
+// Route::post('/show-order/{id}',[App\Http\Controllers\LandingPageController::class, 'ordershow'])->name('ordershow');
+Route::get('/show-order/{id}',[App\Http\Controllers\LandingPageController::class, 'ordershow'])->name('ordershow');
 
 Route::post('/checkout/callback',[App\Http\Controllers\CheckoutController::class, 'callback'])->name('midtrans-callback');
 Route::get('/about-me',[App\Http\Controllers\LandingPageController::class, 'aboutme'])->name('aboutme');

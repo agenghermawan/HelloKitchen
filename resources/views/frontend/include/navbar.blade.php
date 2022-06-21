@@ -21,11 +21,7 @@
                     <li class="nav-item mt-2">
                         <a class="nav-link" href="{{ route('help-center') }}">FaQ</a>
                     </li>
-                    @auth
-                        <li class="nav-item mt-2">
-                            <a class="nav-link" href="{{ route('orderhistory')}}">Order History</a>
-                        </li>
-                    @endauth
+                 
                     @guest
                         {{-- 
                             <li class="nav-item mt-2">
@@ -69,7 +65,10 @@
                                 <a class="dropdown-item" href="{{ route('dashboard')}}">Dashboard</a>
                                 @endif
                                 <a class="dropdown-item" href="{{ route('editProfile',Auth::user()->id)}}">Edit Profile</a>
+                                @auth
+                                <a class="dropdown-item" href="{{ route('orderhistory')}}">Order History</a>
                                 <div class="dropdown-divider"></div>
+                                @endauth
                                 <form action="{{route('logout')}}" method="post">
                                 @csrf
                                     <button type="submit" class="dropdown-item""> Logout </button>

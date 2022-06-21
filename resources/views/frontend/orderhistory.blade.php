@@ -5,87 +5,65 @@
     <!-- Page Content -->
 
     <div class="page-content page-categories">
-
-        {{-- <h3 class="container-fluid mr-2 mt-2 text-center" data-aos="fade-right" data-aos-delay="500" > ORDER HISTORY </h3>
-        <div class="card">
-            <div class="col-12 mt-2">
-                    <div class="card-body">
-                        <table class="table container" data-aos="fade-right" data-aos-delay="900">
-                            <thead class="thead-light">
-                              <tr>
-                                <th scope="col" class="pt-4 pb-4">Code Order</th>
-                                <th scope="col" class="pt-4 pb-4">Total Price</th>
-                                <th scope="col" class="pt-4 pb-4">Name</th>
-                                <th scope="col" class="pt-4 pb-4">Status</th>
-                                <th scope="col" class="pt-4 pb-4">Payment</th>
-                                <th scope="col" class="pt-4 pb-4">Action</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($history as $item)
-                                <tr>
-                                    <td>
-                                       <h4> {{$item  -> code}} </h4>
-                                       <p> {{ $item  -> created_at }}</p>
-                                    </td>
-                                    <td>
-                                        {{$item -> total_price}}
-                                    </td>
-                                    <td>
-                                        {{$item -> name}}
-                                    </td>
-                                    <td>
-                                        {{$item  -> province}}
-                                    </td>
-                                    <td>
-                                        {{$item  -> transaction_status}}
-                                    </td>
-
-                                    <td>
-                                        <form action="{{ route('ordershow',$item  -> id)}}" method="POST" enctype="multipart/form-data" >
-                                        @csrf
-                                            <button type="submit" class="btn btn-primary"> Show </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                          </table>
-                    </div>
-            </div>
-        </div> --}}
         <div class="container">
             <div class="card p-3">
                 <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <a href="" class="btn btn-info" style="width: 100%"> Semua </a>
+                    <form action="{{route('orderhistory')}}" method="GET">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <button class="btn-info w-100 border-0 rounded" type="submit" name="status" value="all" style="padding:0.375rem 0.75rem"> Semua</button>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <button class="btn-info w-100 border-0 rounded" type="submit" name="status"  value="PENDING"  style="padding:0.375rem 0.75rem"> Belum Bayar</button>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <button class="btn-info w-100 border-0 rounded" type="submit" name="status" value="shipping"  style="padding:0.375rem 0.75rem"> Dikirim </button>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <button class="btn-info w-100 border-0 rounded" type="submit" name="status"  value="SUCCESS" style="padding:0.375rem 0.75rem"> Selesai </button>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <a href="" class="btn btn-info" style="width: 100%"> Belum Bayar </a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="" class="btn btn-info" style="width: 100%"> Dikirim </a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="" class="btn btn-info" style="width: 100%"> Selesai </a>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <hr>
-            <div class="card p-2">
+            <div class="p-2">
                 @foreach ($history as $item)
-                    <div class="col-md-12">
-                        <div class="title d-flex justify-content-between row">
+                <a href="{{route('ordershow' ,$item->id)}}" style="text-decoration: none">
+                    <div class="card col-md-12 px-4">
+                        <div class="title d-flex justify-content-between row p-3">
                             <img src="{{ asset('frontend/images/icon-marketplace.png') }}" width="40px" height="40px"
                                 alt="">
-                            <p class="mt-2"> <strong> Pembelian </strong> {{ $item->created_at }} </p>
+                            <p class="mt-2"> <strong> Pembelian : </strong> {{ $item->created_at }} </p>
                             <div>
-                                <p class="btn btn-info"> {{ $item->transaction_status }}</p>
+                                <p class="btn btn-light"> {{ $item->transaction_status }}</p>
                             </div>
                         </div>
+                        <div class="row">
+                            @php
+                                $getAllProduct = App\Models\TransactionDetail::where('transactions_id',$item->id)->with('product','transaction')->get();
+                            @endphp
+                            @foreach($getAllProduct as $item)
+                                <div class="col-md-2 mb-2">
+                                    <img src="{{Storage::url($item->product->ThumbnailPhoto) }}" style="border-radius: 20px" alt="" class="img-fluid"> 
+                                </div>
+                                <div class="col-md-8">
+                                    <h5 style="font-weight: 600"> {{$item->product->ProductName}} </h5>
+                                    <p> Quantity : {{$item->quantity}} </p>
+                                </div>
+                                <div class="container col-md-2 row align-items-center">
+                                    Total Harga : Rp. {{ number_format($item->product->Price)}}
+                                </div>
+                            @endforeach
+                        </div>
+                        <hr>
+                        <div class="row justify-content-between">
+                            <button type="submit" class="btn btn-primary"> Detail Transactions</button>
+                            <h4> Total Pesanan : <span class="text-danger"> RP {{number_format($item->transaction->total_price)}} </span></h4>
+                        </div>
                     </div>
+                    <hr>
+                </a>
                 @endforeach
             </div>
 

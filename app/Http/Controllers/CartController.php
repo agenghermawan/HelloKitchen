@@ -18,9 +18,8 @@ class CartController extends Controller
      */
     public function index()
     {
-       $provinces = Province::pluck('name', 'province_id');
        $carts = Cart::with(['product.galleries', 'user'])->where('users_id', Auth::user()->id)->get();
-       return view('frontend.cart',compact('carts','provinces'));
+       return view('frontend.cart',compact('carts'));
     }
 
     /**

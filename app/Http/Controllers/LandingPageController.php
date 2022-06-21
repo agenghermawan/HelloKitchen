@@ -30,6 +30,7 @@ class LandingPageController extends Controller
        $data =  Product::with('galleries')->findOrFail($id);
         return view('frontend.details',compact('data','review'));
     }
+
         public function add(Request $request,$id){
             $cek = Cart::where('users_id',Auth::user()->id)
                         ->where('Products_id',$id)
@@ -41,7 +42,9 @@ class LandingPageController extends Controller
             if($cek == null){
                 Cart::create($data);
                 if($request->addtocard == true){
-                    return 'Berhasil menambahkan data';
+                    toast('Succesfully add to cart','success');
+                    return back();
+
                 }else{
                     return redirect()->route('cart.index');
                 }
@@ -51,9 +54,23 @@ class LandingPageController extends Controller
     }
 
         public function categories(){
-         $data  =  Product::with('galleries')->get();
          $category = category::all();
-        return view('frontend.categories',compact('data','category'));
+
+         if(request('searchCategory')){
+
+            if(request('searchCategory') == "all"){
+                $data = Product::with('galleries','category')->get();
+                return view('frontend.categories',compact('data','category'));
+            }
+
+            $key = request('searchCategory');
+            $getIdCategory = category::where('name',$key)->first();
+            $data = Product::with('galleries')->where('category_id',$getIdCategory->id)->get();
+            return view('frontend.categories',compact('data','category'));
+         }else{
+            $data = Product::with('galleries','category')->get();
+            return view('frontend.categories',compact('data','category'));
+         }
 
     }
 
@@ -65,16 +82,39 @@ class LandingPageController extends Controller
 
         Review::create($data);
         return redirect()->route('detail',$id);
-
     }
 
     public function orderhistory()
     {
-        $history = Transaction::with('transactiondetail.product.galleries')->where('users_id',Auth::user()->id)->get();
-        return view('frontend.orderhistory',compact('history'));
+        $status =  request('status');
+
+        if(request('status')){
+            if(request('status') == "all"){
+                $history = Transaction::with('transactiondetail.product.galleries')
+                ->where('users_id',Auth::user()->id)
+                ->orderBy('id','desc')->get();
+                return view('frontend.orderhistory',compact('history'));
+            }
+            $history = Transaction::with('transactiondetail.product.galleries')
+            ->where('users_id',Auth::user()->id)
+            ->where('transaction_status',$status)
+            ->orderBy('id','desc')->get();
+
+            
+            return view('frontend.orderhistory',compact('history'));
+        }else{  
+            $history = Transaction::with('transactiondetail.product.galleries')
+            ->where('users_id',Auth::user()->id)
+            ->orderBy('id','desc')->get();
+            
+            return view('frontend.orderhistory',compact('history'));
+
+        }
+
+  
     }
 
-    public function ordershow(Request $request, $id)
+    public function ordershow($id)
     {
         $history = Transaction::with('transactiondetail.product.galleries')->where('id',$id)->first();
         $items = TransactionDetail::with('transaction','product.galleries')->where('transactions_id',$id)->get();

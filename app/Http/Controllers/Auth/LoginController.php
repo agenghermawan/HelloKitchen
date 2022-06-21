@@ -30,8 +30,14 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
+    protected $redirectTo = '/';
+    protected function redirectTo()
+    {
+        if (auth()->user()->roles == 'ADMIN') {
+            return '/dashboard';
+        }
+        return '/';
+    }
     /**
      * Create a new controller instance.
      *
@@ -46,6 +52,7 @@ class LoginController extends Controller
     {
         return Socialite::driver('google')->redirect();
     }
+    
     public function handleCallback()
     {
          $callback = Socialite::driver('google')->stateless()->user();
@@ -56,7 +63,6 @@ class LoginController extends Controller
         ];
     $user = User::firstOrCreate(['email' => $data['email']],$data);
         Auth::login($user,true);
-
         return redirect('/');
     }
 }
