@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductGallery;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ProductGalleriesController extends Controller
 {
@@ -45,7 +46,7 @@ class ProductGalleriesController extends Controller
         ];
 
         ProductGallery::create($gallery);
-
+        toast('Berhasil menambahkan foto product','success');
         return redirect()->route('product-galleries.index');
 
     }
@@ -94,7 +95,7 @@ class ProductGalleriesController extends Controller
     public function destroy($id)
     {
         ProductGallery::findOrFail($id)->delete();
-
+        toast('Berhasil menghapus foto product','success');
         return redirect()->route('product-galleries.index');
     }
 }

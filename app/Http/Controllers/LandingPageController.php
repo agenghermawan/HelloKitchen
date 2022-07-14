@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use PhpParser\Node\Stmt\Switch_;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
@@ -100,18 +101,18 @@ class LandingPageController extends Controller
             ->where('transaction_status',$status)
             ->orderBy('id','desc')->get();
 
-            
+
             return view('frontend.orderhistory',compact('history'));
-        }else{  
+        }else{
             $history = Transaction::with('transactiondetail.product.galleries')
             ->where('users_id',Auth::user()->id)
             ->orderBy('id','desc')->get();
-            
+
             return view('frontend.orderhistory',compact('history'));
 
         }
 
-  
+
     }
 
     public function ordershow($id)
@@ -134,34 +135,42 @@ class LandingPageController extends Controller
     }
     public function updateProfile(Request $request, $id)
     {
-        dd($request->file('avatar'));
         $data = $request->all();
-        Validator::make($data, [
-            'name' => ['required'],
-            'email' => ['required'],
-            'telp' => ['required'],
-            'old_password' => ['required'],
-            'new_password' => ['required'],
-            'password_confirm' => ['same:new_password'],
-        ])->validate();
-
-        $user = User::find(auth()->user()->id);
-        if (!Hash::check($data['old_password'], $user->password)) {
-            return back()->with('error', 'The specified password does not match the database password');
-        }
-
+        // dd($data);
         if($request->file('avatar')){
-            $data['store'] = $request->file('avatar')->store('image/avatar','public');
+             $user = User::find($id);
+             $user->avatar = $request->file('avatar')->store('image/avatar','public');
+             $user->save();
         }
 
-        User::find($id)->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'telp' => $request->telp,
-            'password' => Hash::make($request->new_password),
-        ]);
+          $user = User::find($id);
+             $user->name = $request->name;
+             $user->email = $request->email;
+             $user->telp = $request->telp;
+           $user->save();
 
+        // Validator::make($data, [
+        //     'name' => ['required'],
+        //     'email' => ['required'],
+        //     'telp' => ['required'],
+        //     // 'old_password' => ['required'],
+        //     // 'new_password' => ['required'],
+        //     // 'password_confirm' => ['same:new_password'],
+        // ])->validate();
+
+        if($request->old_password || $request->new_password || $request->password_confirm){
+            // $user = User::find(auth()->user()->id);
+            if ($request->new_password != $request->password_confirm) {
+                return back()->with('error', 'The specified password does not match the database password');
+            }else{
+                $user = User::find($id);
+                $user->password = Hash::make($request->new_password);
+                $user->save();
+            }
+        }
+        toast('Berhasil memperbarui profile','success');
         return back();
+
     }
     public function success()
     {

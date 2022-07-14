@@ -6,6 +6,7 @@ use App\Models\category;
 use App\Models\Product;
 use App\Models\ProductGallery;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ProductController extends Controller
 {
@@ -49,7 +50,7 @@ class ProductController extends Controller
         ];
 
         ProductGallery::create($gallery);
-
+        toast('Berhasil menambahkan product','success');
         return redirect()->route('product.index');
     }
 
@@ -88,8 +89,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-
         if(empty($request->ThumbnailPhoto)){
             $item = Product::findOrFail($id);
             $data = $request -> all();
@@ -99,11 +98,10 @@ class ProductController extends Controller
             $item = Product::findOrFail($id);
             $data = $request -> all();
             $data['ThumbnailPhoto'] = $request->file('ThumbnailPhoto')->store('assets/product', 'public',$request->file('ThumbnailPhoto')->GetClientOriginalName());
-
             $insert =  $item -> update($data);
         }
 
-
+        toast('Berhasil menghapus product','success');
         return redirect()->route('product.index');
 
     }
@@ -118,7 +116,7 @@ class ProductController extends Controller
     {
         ProductGallery::with('Product')->where('Products_id',$id)->delete();
         Product::findOrFail($id)->delete();
-
+         toast('Berhasil menghapus product','success');
         return redirect()->route('product.index');
     }
 }

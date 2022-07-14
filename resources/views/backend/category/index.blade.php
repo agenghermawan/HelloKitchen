@@ -46,8 +46,12 @@
                                                         {{ $item->description }}
                                                     </td>
                                                     <td>
-                                                        <img src="{{ Storage::url($item->image) }}" width="50px"
-                                                            height="50px" style="object-fit: cover" alt="">
+                                                        <form action="{{ route('category.destroy', $item->id) }}"
+                                                            method="post">
+                                                            @method('delete')
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-danger"> Hapus </button>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             @endforeach

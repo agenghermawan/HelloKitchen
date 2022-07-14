@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CategoryController extends Controller
 {
@@ -47,7 +48,8 @@ class CategoryController extends Controller
         $data['image']= $request->file('image')->store('image/category','public');
 
         category::create($data);
-        return back();
+        toast('Berhasil menambahkan daftar kategori','success');
+        return redirect()->route('category.index');
     }
 
     /**
@@ -92,6 +94,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = category::find($id);
+        $category->delete();
+        toast('Berhasil menghapus kategori','success');
+        return redirect()->back();
     }
 }

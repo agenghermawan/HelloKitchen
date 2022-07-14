@@ -1,8 +1,7 @@
 @extends('backend.include.app')
 
 @section('content')
-
-    <div class="section-content section-dashboard-home" >
+    <div class="section-content section-dashboard-home">
         <div class="container-fluid">
             <div class="dashboard-heading">
                 <h2 class="dashboard-title">Add New Product</h2>
@@ -23,18 +22,16 @@
                                                 <label>Category Name</label>
                                                 <input type="text" class="form-control" name="name">
                                                 @error('name')
-                                                    <div class="text text-danger">{{$message}}</div>
+                                                    <div class="text text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="thumbnails">Description Category</label>
-                                                <textarea class="form-control pt-1" id="thumbnails"
-                                                    aria-describedby="thumbnails" name="description" >
-                                                </textarea>
+                                                <textarea name="description" id="" class="form-control " cols="10" rows="2"></textarea>
                                                 @error('description')
-                                                    <div class="text text-danger">{{$message}}</div>
+                                                    <div class="text text-danger">{{ $message }}</div>
                                                 @enderror
                                                 <small class="text-muted">
                                                     Kamu dapat menambahkan descripsi kategori
@@ -46,7 +43,7 @@
                                                 <label for="thumbnails">Image Category</label>
                                                 <input type="file" class="form-control" name="image">
                                                 @error('description')
-                                                <div class="text text-danger">{{$message}}</div>
+                                                    <div class="text text-danger">{{ $message }}</div>
                                                 @enderror
                                                 <small class="text-muted">
                                                     Kamu dapat menambahkan descripsi kategori
